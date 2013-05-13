@@ -1,0 +1,32 @@
+/*********************************************************************
+*               SEGGER MICROCONTROLLER GmbH & Co KG                  *
+*       Solutions for real time microcontroller applications         *
+**********************************************************************
+*                                                                    *
+*       (c) 2010   SEGGER Microcontroller GmbH & Co KG               *
+*                                                                    *
+*       www.segger.com     Support: support@segger.com               *
+*                                                                    *
+**********************************************************************
+
+----------------------------------------------------------------------
+File    : Start_STM8_Sim.mac
+Purpose : Setup file for embOS STM8 start program running in simulation
+          Feel free to modify this file acc. to your target system.
+--------  END-OF-HEADER  ---------------------------------------------
+*/
+
+execUserSetup() {
+  __message "Start_STM8_Sim.mac: execUserSetup()\n";
+  __disableInterrupts();
+  __cancelAllInterrupts();
+  __orderInterrupt ("TIM3_OVR_UIF", 100000, 5000, 0, 0, 0, 100);
+  __message "Start_STM8_Sim.mac: Generating embOS timer interrupt TIM3_OVR_UIF every 5000 cycles\n";
+  __enableInterrupts();
+}
+
+execUserReset() {
+  __message "Start_STM8_Sim.mac: execUserReset()\n";
+  __message "Start_STM8_Sim.mac: Correct interrupt software priority for simulation\n";
+  __writeMemory8(0x3F, 0x007F73, "Memory");
+}
